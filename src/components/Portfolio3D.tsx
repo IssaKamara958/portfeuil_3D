@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import Scene from './3d/Scene';
 import Navbar from './ui/Navbar';
 import ProjectsGrid from './ui/ProjectsGrid';
+import OtherProjects from './ui/OtherProjects';
 import Modal from './ui/Modal';
 import SkillsSection from './ui/SkillsSection';
 import ContactForm from './ui/ContactForm';
@@ -128,6 +129,16 @@ export default function Portfolio3D() {
             </p>
           </div>
           <ProjectsGrid onOpen={handleProjectOpen} />
+        </section>
+
+        <section id="other-projects" className="pt-16">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-foreground">Autres Projets</h2>
+            <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">
+              Une sélection de projets supplémentaires hébergés sur Netlify.
+            </p>
+          </div>
+          <OtherProjects onOpen={handleProjectOpen} />
         </section>
 
         <section id="skills">

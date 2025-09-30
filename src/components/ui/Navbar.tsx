@@ -16,6 +16,14 @@ export default function Navbar({ theme, setTheme }: NavbarProps) {
         </div>
       </div>
 
+      <nav className="hidden md:flex items-center gap-2 glass-panel p-2 rounded-lg">
+        <a href="#home" className="px-3 py-1 rounded-md text-sm text-foreground hover:bg-secondary/20">Accueil</a>
+        <a href="#projects" className="px-3 py-1 rounded-md text-sm text-foreground hover:bg-secondary/20">Projets</a>
+        <a href="#other-projects" className="px-3 py-1 rounded-md text-sm text-foreground hover:bg-secondary/20">Autres projets</a>
+        <a href="#skills" className="px-3 py-1 rounded-md text-sm text-foreground hover:bg-secondary/20">Compétences</a>
+        <a href="#about" className="px-3 py-1 rounded-md text-sm text-foreground hover:bg-secondary/20">À propos</a>
+      </nav>
+
       <div className="flex items-center gap-2">
         <button
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
