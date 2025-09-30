@@ -1,69 +1,51 @@
-# Welcome to your firebase studio & Gemini project
+# Portefeuille 3D Interactif d'Issa Kamara
 
-## How can I edit this code?
+Ce projet est un portefeuille web innovant et immersif conçu pour présenter le parcours, les compétences et les projets d'Issa Kamara, un développeur web passionné avec un bagage unique. Le site se distingue par son expérience utilisateur en 3D et son assistant avatar interactif, offrant une navigation personnalisée et engageante.
 
-There are several ways of editing your application.
+## 🚀 Fonctionnalités Clés
 
-**Use firebase studio & Gemini**
+- **Avatar Assistant IA :** Un guide virtuel intelligent qui accueille les visiteurs, personnalise leur parcours et répond à leurs questions. L'assistant adapte ses réponses selon que le visiteur est un recruteur ou un simple curieux, offrant une expérience sur mesure.
+- **Interface 3D immersive :** Le portefeuille utilise des éléments 3D pour créer un environnement visuellement captivant qui met en valeur les projets et les compétences d'Issa de manière dynamique.
+- **Navigation intuitive par sections :**
+  - **Accueil :** Présentation générale du portfolio par l'avatar.
+  - **Projets :** Catalogue des réalisations d'Issa, allant du e-commerce à la santé numérique.
+  - **Compétences :** Mise en lumière de ses compétences techniques et créatives, enrichies par son parcours artistique.
+  - **À propos :** Récit de son parcours atypique : artiste peintre, entrepreneur et maintenant développeur web.
+  - **Contact :** Un formulaire pour faciliter la prise de contact et les collaborations.
+- **Design entièrement responsive :** Le site est optimisé pour une expérience fluide sur tous les appareils, du mobile au bureau.
 
-Simply visit the [firebase studio & Gemini Project](https://lovable.dev/projects/7a1a3fb1-1f89-4e09-a687-47317fabe653) and start prompting.
+## 🛠️ Technologies Utilisées
 
-Changes made via firebase studio & Gemini will be committed automatically to this repo.
+- **Frontend :**
+  - **React :** Bibliothèque JavaScript pour la construction d'interfaces utilisateur.
+  - **TypeScript :** Pour un code plus sûr et plus robuste.
+  - **Vite :** Outil de build nouvelle génération pour un développement rapide.
+  - **Tailwind CSS :** Framework CSS pour un design rapide et personnalisé.
+- **3D :**
+  - **Three.js / React Three Fiber :** Pour la création et l'animation des scènes 3D.
+- **UI :**
+  - **Shadcn UI :** Collection de composants d'interface utilisateur réutilisables.
 
-**Use your preferred IDE**
+## ⚙️ Installation et Lancement
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in firebase studio & Gemini.
+Pour explorer ce projet en local, suivez ces étapes :
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+1. **Clonez le dépôt :**
+   ```bash
+   git clone https://github.com/IssaKamara958/portfeuil_3D.git
+   ```
+2. **Installez les dépendances :**
+   ```bash
+   cd portfeuil_3D
+   npm install
+   ```
+3. **Lancez le serveur de développement :**
+   ```bash
+   npm run dev
+   ```
+4. **Ouvrez votre navigateur :**
+   Rendez-vous à l'adresse `http://localhost:5173` pour découvrir le portfolio.
 
-Follow these steps:
+## 👤 À Propos d'Issa Kamara
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [firebase studio & Gemini](https://lovable.dev/projects/7a1a3fb1-1f89-4e09-a687-47317fabe653) and click on Share -> Publish.
-
-## Can I connect a custom domain to my firebase studio & Gemini project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Artiste, entrepreneur et développeur, Issa Kamara apporte une perspective unique à chaque projet. Sa décennie en tant qu'artiste peintre et son expérience dans l'entrepreneuriat ont aiguisé sa créativité et sa capacité à résoudre des problèmes, des qualités qu'il met aujourd'hui au service du développement web pour créer des expériences digitales révolutionnaires.
