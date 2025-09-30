@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from './button';
 import { Card } from './card';
+import { getAIResponse } from '../../lib/ai'; // Import the AI service
 
 interface Message {
   id: string;
@@ -14,7 +15,7 @@ interface AvatarAssistantProps {
   currentSection?: string;
 }
 
-type UserType = 'unknown' | 'visitor' | 'recruiter';
+type UserType = 'unknown' | 'visitor' | 'recruiter' | 'developer' | 'project_holder';
 
 interface UserProfile {
   type: UserType;
@@ -28,7 +29,7 @@ const sectionMessages = {
   projects: "Découvrez les projets innovants d'Issa : du e-commerce à la santé numérique, chaque réalisation démontre son expertise technique.",
   skills: "Les compétences d'Issa allient technique et créativité : développement web, design, et une approche unique enrichie par son parcours artistique.",
   about: "Le parcours d'Issa est fascinant : artiste peintre, entrepreneur dans le café, aujourd'hui développeur web qui révolutionne l'expérience digitale.",
-  contact: "Prêt à collaborer avec Issa ? Je peux vous mettre en contact et vous orienter selon vos besoins professionnels."
+  contact: "Prêt à collaborer avec Issa ? Je peux vous mettre en contact et vous orienter selon vos besoins professionnels.",
 };
 
 const welcomeMessage = "Bonjour ! Je suis Ndeye Fatou Sow, Assistante virtuelle de Chackor Organisation et conseillère technique d'Issa KAMARA. Je suis là pour vous guider dans votre visite et vous aider à découvrir le travail exceptionnel d'Issa. Permettez-moi de personnaliser votre expérience !";
@@ -41,6 +42,7 @@ export default function AvatarAssistant({ currentSection = 'home' }: AvatarAssis
   const [userProfile, setUserProfile] = useState<UserProfile>({ type: 'unknown' });
   const [showProfileForm, setShowProfileForm] = useState(false);
   const [hasWelcomed, setHasWelcomed] = useState(false);
+  const [userInput, setUserInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -56,9 +58,9 @@ export default function AvatarAssistant({ currentSection = 'home' }: AvatarAssis
       id: Date.now().toString(),
       text,
       type,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
-    setMessages(prev => [...prev, newMessage]);
+    setMessages((prev) => [...prev, newMessage]);
   };
 
   const speakText = async (text: string) => {
@@ -68,21 +70,22 @@ export default function AvatarAssistant({ currentSection = 'home' }: AvatarAssis
       utterance.lang = 'fr-FR';
       utterance.rate = 0.9;
       utterance.pitch = 1.2; // Voix plus aiguë pour une femme
-      
+
       // Préférer une voix féminine si disponible
       const voices = speechSynthesis.getVoices();
-      const femaleVoice = voices.find(voice => 
-        voice.lang.includes('fr') && 
-        (voice.name.toLowerCase().includes('female') || voice.name.toLowerCase().includes('femme'))
+      const femaleVoice = voices.find(
+        (voice) =>
+          voice.lang.includes('fr') &&
+          (voice.name.toLowerCase().includes('female') || voice.name.toLowerCase().includes('femme'))
       );
       if (femaleVoice) {
         utterance.voice = femaleVoice;
       }
-      
+
       utterance.onend = () => {
         setIsSpeaking(false);
       };
-      
+
       speechSynthesis.speak(utterance);
     }
   };
@@ -104,77 +107,57 @@ export default function AvatarAssistant({ currentSection = 'home' }: AvatarAssis
     }
   };
 
-  const handleSectionPresentation = () => {
+  const handleSectionPresentation = async () => {
     const baseMessage = sectionMessages[currentSection as keyof typeof sectionMessages] || sectionMessages.home;
-    let contextualMessage = baseMessage;
-    
-    // Adapter le message selon le profil utilisateur
-    if (userProfile.type === 'recruiter') {
-      contextualMessage += " En tant que recruteur, je vous recommande de consulter le CV complet et les détails professionnels d'Issa dans la section contact.";
-    } else if (userProfile.type === 'visitor') {
-      contextualMessage += " Prenez votre temps pour explorer et n'hésitez pas à me poser des questions !";
-    }
-    
+    const prompt = `L'utilisateur est sur la section '${currentSection}' du portfolio. Le message de base est : '${baseMessage}'. Adapte ce message pour un profil de type '${userProfile.type}'.`;
+
     setIsTyping(true);
-    setTimeout(() => {
-      setIsTyping(false);
-      addMessage(contextualMessage, 'assistant');
-      speakText(contextualMessage);
-    }, 1000);
+    const aiResponse = await getAIResponse(prompt);
+    setIsTyping(false);
+    addMessage(aiResponse, 'assistant');
+    speakText(aiResponse);
   };
 
   const handleUserTypeSelection = (type: UserType) => {
     setUserProfile({ ...userProfile, type });
     setShowProfileForm(false);
-    
+
     let response = "";
-    if (type === 'recruiter') {
-      response = "Excellent ! En tant que recruteur, je vais vous orienter vers les informations professionnelles d'Issa. Vous trouverez son CV complet, ses expériences détaillées et ses réalisations dans la section Portfolio. Je peux aussi vous présenter ses projets les plus pertinents pour vos besoins de recrutement.";
-    } else {
-      response = "Parfait ! Je vais personnaliser votre visite pour que vous découvriez le meilleur du travail d'Issa. Laissez-moi vous guider à travers son portfolio et ses créations remarquables.";
+    switch (type) {
+      case 'recruiter':
+        response = "Excellent ! En tant que recruteur, je vais vous orienter vers les informations professionnelles d'Issa. Vous trouverez son CV complet, ses expériences détaillées et ses réalisations dans la section Portfolio. Je peux aussi vous présenter ses projets les plus pertinents pour vos besoins de recrutement.";
+        break;
+      case 'developer':
+        response = "Salut confrère/consœur ! Je peux te donner des détails techniques sur les projets, les technos utilisées, ou même des snippets de code. N'hésite pas à me poser des questions précises.";
+        break;
+      case 'project_holder':
+        response = "Bienvenue ! Je suis là pour vous aider à voir comment Issa peut contribuer à la réussite de votre projet. Explorons ensemble ses compétences et réalisations pour voir comment elles correspondent à vos besoins.";
+        break;
+      default:
+        response = "Parfait ! Je vais personnaliser votre visite pour que vous découvriez le meilleur du travail d'Issa. Laissez-moi vous guider à travers son portfolio et ses créations remarquables.";
     }
-    
+
     addMessage(response, 'assistant');
     speakText(response);
   };
-
-  const handleQuickAction = (action: string) => {
-    let response = "";
-    
-    switch (action) {
-      case 'projects':
-        if (userProfile.type === 'recruiter') {
-          response = "Pour un recruteur, je recommande particulièrement le projet Chackor Shop (e-commerce full-stack) et Kou Ayé (app mobile pour pharmacies). Ces projets démontrent parfaitement les compétences techniques d'Issa en développement web moderne.";
-        } else {
-          response = "Découvrez les créations d'Issa : l'e-commerce Chackor Shop, l'application Kou Ayé pour les pharmacies de garde, et son outil WiFi QR Scanner. Chaque projet raconte une histoire d'innovation !";
-        }
-        break;
-      case 'skills':
-        if (userProfile.type === 'recruiter') {
-          response = "Issa maîtrise React, JavaScript, Python, TypeScript et les technologies modernes. Son profil unique combine développement technique, design UX/UI et gestion de projet. Son background artistique apporte une valeur ajoutée rare sur le marché.";
-        } else {
-          response = "Les compétences d'Issa sont fascinantes : développement web moderne, design créatif, et une approche unique enrichie par 10 ans d'art et 6 ans d'entrepreneuriat.";
-        }
-        break;
-      case 'contact':
-        if (userProfile.type === 'recruiter') {
-          response = "Issa est disponible pour des opportunités professionnelles. Contactez-le directement : issakamara958@gmail.com ou +221 77 682 8441. Son portfolio complet avec CV est accessible dans la section dédiée.";
-        } else {
-          response = "Vous pouvez contacter Issa via email, WhatsApp, ou découvrir son travail sur GitHub. Il est toujours ouvert aux collaborations créatives !";
-        }
-        break;
-      case 'background':
-        response = "Le parcours d'Issa est extraordinaire : 10 ans comme artiste peintre, 6 ans d'entrepreneuriat dans le café, maintenant développeur web passionné. Cette richesse d'expériences nourrit sa créativité digitale !";
-        break;
-      case 'portfolio':
-        response = "Je vous oriente vers le portfolio professionnel complet d'Issa où vous trouverez CV, certifications, et détails de ses expériences. C'est l'endroit idéal pour les recruteurs !";
-        break;
-      default:
-        response = "Comment puis-je personnaliser votre découverte du travail d'Issa ? Je m'adapte à vos besoins spécifiques !";
-    }
-    
-    addMessage(response, 'assistant');
-    speakText(response);
+  
+  const handleSendMessage = async () => {
+    if (userInput.trim() === '') return;
+  
+    addMessage(userInput, 'user');
+    setUserInput('');
+    setIsTyping(true);
+  
+    const prompt = `L'utilisateur de type '${userProfile.type}' a posé la question suivante : '${userInput}'. Fournis une réponse pertinente et concise en te basant sur le portfolio d'Issa Kamara.`;
+    const aiResponse = await getAIResponse(prompt);
+  
+    setIsTyping(false);
+    addMessage(aiResponse, 'assistant');
+    speakText(aiResponse);
+  };
+  
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserInput(e.target.value);
   };
 
   return (
@@ -286,6 +269,22 @@ export default function AvatarAssistant({ currentSection = 'home' }: AvatarAssis
                       >
                         💼 Recruteur - J'évalue un profil professionnel
                       </Button>
+                      <Button
+                      onClick={() => handleUserTypeSelection('developer')}
+                      variant="outline"
+                      size="sm"
+                      className="w-full text-xs justify-start"
+                    >
+                      💻 Développeur - Je cherche des détails techniques
+                    </Button>
+                    <Button
+                      onClick={() => handleUserTypeSelection('project_holder')}
+                      variant="outline"
+                      size="sm"
+                      className="w-full text-xs justify-start"
+                    >
+                      🚀 Porteur de projet - Je cherche un partenaire
+                    </Button>
                     </div>
                   </motion.div>
                 )}
@@ -328,76 +327,20 @@ export default function AvatarAssistant({ currentSection = 'home' }: AvatarAssis
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* Actions */}
+              {/* Input */}
               <div className="p-4 border-t border-border/20">
-                <div className="space-y-2">
-                  {!hasWelcomed ? (
-                    <Button
-                      onClick={handleWelcome}
-                      size="sm"
-                      className="w-full"
-                      disabled={isTyping}
-                    >
-                      👋 Me rencontrer
-                    </Button>
-                  ) : (
-                    <>
-                      <Button
-                        onClick={handleSectionPresentation}
-                        size="sm"
-                        className="w-full"
-                        disabled={isTyping}
-                      >
-                        🎯 Présenter cette section
-                      </Button>
-                      
-                      <div className="grid grid-cols-2 gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleQuickAction('projects')}
-                          className="text-xs"
-                        >
-                          📁 Projets
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleQuickAction('skills')}
-                          className="text-xs"
-                        >
-                          ⚡ Compétences
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleQuickAction('background')}
-                          className="text-xs"
-                        >
-                          🎨 Parcours
-                        </Button>
-                        {userProfile.type === 'recruiter' ? (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleQuickAction('portfolio')}
-                            className="text-xs"
-                          >
-                            💼 Portfolio Pro
-                          </Button>
-                        ) : (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleQuickAction('contact')}
-                            className="text-xs"
-                          >
-                            📞 Contact
-                          </Button>
-                        )}
-                      </div>
-                    </>
-                  )}
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={userInput}
+                    onChange={onInputChange}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                    placeholder="Posez votre question..."
+                    className="flex-1 p-2 border rounded-md bg-transparent text-sm"
+                  />
+                  <Button onClick={handleSendMessage} size="sm" disabled={isTyping}>
+                    Envoyer
+                  </Button>
                 </div>
               </div>
             </Card>
