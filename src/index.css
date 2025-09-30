@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 238 82% 66%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 292 84% 61%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.75rem;
+
+    /* Portfolio specific colors - Issa KAMARA theme: white + green + brown/beige */
+    --portfolio-bg-start: 120 20% 98%;
+    --portfolio-bg-mid: 30 15% 96%;
+    --portfolio-bg-end: 25 25% 92%;
+    
+    --glass-bg: 0 0% 100%;
+    --glass-border: 120 30% 25%;
+    --glass-text: 25 25% 15%;
+    
+    --hero-primary: 120 30% 25%;      /* Deep green */
+    --hero-secondary: 30 35% 55%;     /* Warm brown */
+    --hero-tertiary: 120 60% 40%;     /* Vibrant green */
+    
+    /* Contact and accent colors */
+    --contact-primary: 120 60% 40%;
+    --contact-secondary: 30 60% 35%;
+    
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 25 25% 15%;
+    --foreground: 30 15% 96%;
+
+    --card: 25 30% 12%;
+    --card-foreground: 30 15% 96%;
+
+    --popover: 25 30% 12%;
+    --popover-foreground: 30 15% 96%;
+
+    --primary: 120 60% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 30 35% 55%;
+    --secondary-foreground: 30 15% 96%;
+
+    --muted: 25 20% 20%;
+    --muted-foreground: 30 25% 70%;
+
+    --accent: 120 60% 40%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 30 15% 96%;
+
+    --border: 25 20% 20%;
+    --input: 25 20% 20%;
+    --ring: 120 60% 40%;
+    
+    /* Dark mode portfolio colors */
+    --portfolio-bg-start: 25 25% 15%;
+    --portfolio-bg-mid: 25 30% 12%;
+    --portfolio-bg-end: 25 35% 8%;
+    
+    --glass-bg: 30 15% 96%;
+    --glass-border: 120 30% 25%;
+    --glass-text: 30 15% 96%;
+    
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-lg;
+  }
+  
+  .glass-button {
+    @apply bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-200;
+  }
+  
+  .hero-gradient {
+    background: linear-gradient(135deg, hsl(var(--hero-primary)), hsl(var(--hero-secondary)));
+  }
+  
+  .portfolio-bg {
+    background: linear-gradient(to bottom, hsl(var(--portfolio-bg-start)), hsl(var(--portfolio-bg-mid)), hsl(var(--portfolio-bg-end)));
+  }
+  
+  .text-hero-secondary {
+    color: hsl(var(--hero-secondary));
+  }
+  
+  .text-hero-tertiary {
+    color: hsl(var(--hero-tertiary));
+  }
+}
