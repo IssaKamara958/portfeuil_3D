@@ -1,39 +1,38 @@
 # Dependencies
-/node_modules
-/.pnp
-.pnp.js
+node_modules/
 
-# Testing
-/coverage
-
-# Vite
-/dist
-/.vite
-
-# Production
-/build
-
-# Misc
-.DS_Store
-*.local
+# Build output
+dist/
+.output/
 
 # Logs
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
+pnpm-debug.log*
+
+# IDEs
+.vscode/
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.idx/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
 # Environment variables
 .env
-.env*.local
-
-# Editor directories and files
-.vscode
-.idea
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# Bun
-bun.lockb
+.env.local
+.env.*.local
