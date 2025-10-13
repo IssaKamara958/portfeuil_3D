@@ -1,5 +1,9 @@
 # Portefeuille 3D Interactif d'Issa Kamara
 
+![Build Status](https://img.shields.io/github/actions/workflow/status/IssaKamara958/portfeuil_3D/main.yml?branch=main) 
+[![npm version](https://img.shields.io/npm/v/vite.svg)](https://www.npmjs.com/package/vite) 
+[![Licence](https://img.shields.io/github/license/IssaKamara958/portfeuil_3D)](LICENSE)
+
 Ce projet est un portefeuille web innovant et immersif conçu pour présenter le parcours, les compétences et les projets d'Issa Kamara, un développeur web passionné avec un bagage unique. Le site se distingue par son expérience utilisateur en 3D et son assistant avatar interactif, offrant une navigation personnalisée et engageante.
 
 ## 🚀 Fonctionnalités Clés
@@ -26,6 +30,21 @@ Ce projet est un portefeuille web innovant et immersif conçu pour présenter le
 - **UI :**
   - **Shadcn UI :** Collection de composants d'interface utilisateur réutilisables.
 
+## 📁 Structure du Projet
+
+```
+/src
+|-- /assets         # Fichiers statiques (images, etc.)
+|-- /components     # Composants React
+|   |-- /3d         # Composants spécifiques à la scène 3D
+|   |-- /ui         # Composants d'interface (boutons, cartes, etc.)
+|-- /hooks          # Hooks React personnalisés
+|-- /lib            # Modules et utilitaires (Supabase, etc.)
+|-- /pages          # Pages principales de l'application
+|-- App.tsx         # Composant racine de l'application
+|-- main.tsx        # Point d'entrée de l'application
+```
+
 ## ⚙️ Installation et Lancement
 
 Pour explorer ce projet en local, suivez ces étapes :
@@ -45,6 +64,22 @@ Pour explorer ce projet en local, suivez ces étapes :
    ```
 4. **Ouvrez votre navigateur :**
    Rendez-vous à l'adresse `http://localhost:5173` pour découvrir le portfolio.
+
+## 🚀 Déploiement
+
+Le projet est configuré pour un déploiement simple sur Firebase Hosting.
+
+1. **Créez une version de production :**
+   ```bash
+   npm run build
+   ```
+   Cette commande génère un dossier `dist` contenant les fichiers statiques optimisés.
+
+2. **Déployez sur Firebase :**
+   Assurez-vous d'avoir Firebase CLI installé et d'être connecté à votre compte.
+   ```bash
+   firebase deploy --only hosting
+   ```
 
 ## 👤 À Propos d'Issa Kamara
 

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '../../lib/supabaseClient';
 
 interface Skill {
   name: string;
@@ -7,23 +8,6 @@ interface Skill {
   category: 'frontend' | 'backend' | 'tools' | 'creative';
   description: string;
 }
-
-const skills: Skill[] = [
-  { name: 'React', level: 90, category: 'frontend', description: 'Développement d\'applications web modernes avec hooks, context et état global' },
-  { name: 'JavaScript', level: 85, category: 'frontend', description: 'ES6+, DOM manipulation, APIs, programmation asynchrone' },
-  { name: 'HTML5', level: 95, category: 'frontend', description: 'Structure sémantique, accessibilité, SEO' },
-  { name: 'CSS3', level: 90, category: 'frontend', description: 'Flexbox, Grid, animations, responsive design' },
-  { name: 'Tailwind CSS', level: 85, category: 'frontend', description: 'Utility-first CSS framework, design systems' },
-  { name: 'Bootstrap', level: 80, category: 'frontend', description: 'Framework CSS responsive, composants UI prêts à l\'emploi' },
-  { name: 'Python', level: 75, category: 'backend', description: 'Flask, traitement d\'images, automatisation, applications desktop' },
-  { name: 'PHP', level: 60, category: 'backend', description: 'Développement backend, APIs REST' },
-  { name: 'MySQL', level: 55, category: 'backend', description: 'Base de données relationnelles, requêtes SQL' },
-  { name: 'OpenCV', level: 70, category: 'tools', description: 'Traitement d\'images, détection QR codes, vision par ordinateur' },
-  { name: 'GitHub', level: 80, category: 'tools', description: 'Contrôle de version, collaboration, CI/CD' },
-  { name: 'Inno Setup', level: 65, category: 'tools', description: 'Création d\'installateurs Windows, déploiement d\'applications' },
-  { name: 'Design Graphique', level: 95, category: 'creative', description: 'Logo design, identité visuelle, UI/UX' },
-  { name: 'Peinture', level: 90, category: 'creative', description: '10+ ans d\'expérience artistique, créativité appliquée' },
-];
 
 const categoryColors = {
   frontend: 'bg-emerald-500',
@@ -42,6 +26,20 @@ const categoryLabels = {
 export default function SkillsSection() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
+  const [skills, setSkills] = useState<Skill[]>([]);
+
+  useEffect(() => {
+    const fetchSkills = async () => {
+      const { data, error } = await supabase.from('skills').select('*');
+      if (error) {
+        console.error('Error fetching skills:', JSON.stringify(error, null, 2));
+      } else {
+        setSkills(data as Skill[]);
+      }
+    };
+
+    fetchSkills();
+  }, []);
 
   const filteredSkills = selectedCategory 
     ? skills.filter(skill => skill.category === selectedCategory)
