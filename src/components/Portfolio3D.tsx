@@ -10,6 +10,7 @@ import Modal from './ui/Modal';
 import SkillsSection from './ui/SkillsSection';
 import ContactForm from './ui/ContactForm';
 import AvatarAssistant from './ui/AvatarAssistant';
+import profileImage from '../assets/issa-profile.jpg';
 
 interface Project {
   title: string;
@@ -90,7 +91,7 @@ export default function Portfolio3D() {
             >
               <div className="flex items-start gap-4 mb-4">
                 <img 
-                  src="/src/assets/issa-profile.jpg" 
+                  src={profileImage} 
                   alt="Issa KAMARA - Développeur Frontend" 
                   className="w-16 h-16 rounded-full object-cover border-2 border-primary/20"
                 />
@@ -103,7 +104,15 @@ export default function Portfolio3D() {
                 Développeur web front-end passionné par le design, la performance et les solutions digitales accessibles. 
                 Artiste peintre depuis plus de 10 ans et producteur de café depuis 6 ans, j'aime combiner créativité et technologie.
               </p>
-              <div className="mt-4 flex gap-2">
+              <div className="mt-4 flex flex-wrap gap-2">
+                <a 
+                  href="https://issa-portfeuil.netlify.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 rounded-md bg-secondary text-secondary-foreground text-sm hover:opacity-90 transition font-semibold"
+                >
+                  Mon CV/Portfolio 📄
+                </a>
                 <a 
                   href="#projects" 
                   className="px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm hover:opacity-90 transition"

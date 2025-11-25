@@ -23,9 +23,42 @@ const categoryLabels = {
   creative: 'Créativité',
 };
 
+const sectionVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: 'easeInOut',
+    },
+  },
+};
+
+const gridVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const skillVariants = {
+  hidden: { opacity: 0, y: 30, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      ease: 'easeOut',
+    },
+  },
+};
+
 export default function SkillsSection() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
   const [skills, setSkills] = useState<Skill[]>([]);
 
   useEffect(() => {
@@ -41,21 +74,25 @@ export default function SkillsSection() {
     fetchSkills();
   }, []);
 
-  const filteredSkills = selectedCategory 
+  const filteredSkills = selectedCategory
     ? skills.filter(skill => skill.category === selectedCategory)
     : skills;
 
   return (
-    <section className="max-w-6xl mx-auto p-6 mt-12">
+    <motion.section 
+      className="max-w-6xl mx-auto p-6 mt-12"
+      variants={sectionVariants}
+      initial="hidden"
+      animate="visible"
+    >
       <div className="text-center mb-8">
         <h3 className="text-3xl font-bold text-foreground mb-4">Compétences & Expertise</h3>
         <p className="text-muted-foreground max-w-2xl mx-auto">
-          Une combinaison unique de compétences techniques et créatives, 
+          Une combinaison unique de compétences techniques et créatives,
           forgée par 10 ans d'art et 6 ans d'entrepreneuriat dans le café.
         </p>
       </div>
 
-      {/* Category filters */}
       <div className="flex flex-wrap justify-center gap-3 mb-8">
         <button
           onClick={() => setSelectedCategory(null)}
@@ -82,17 +119,19 @@ export default function SkillsSection() {
         ))}
       </div>
 
-      {/* Skills grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredSkills.map((skill, index) => (
+      <motion.div 
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        variants={gridVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {filteredSkills.map((skill) => (
           <motion.div
             key={skill.name}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            onHoverStart={() => setHoveredSkill(skill.name)}
-            onHoverEnd={() => setHoveredSkill(null)}
-            className="glass-panel p-6 rounded-2xl hover:scale-105 transition-transform cursor-pointer"
+            variants={skillVariants}
+            whileHover={{ scale: 1.05, rotate: 1, y: -5 }}
+            transition={{ type: 'spring', stiffness: 300 }}
+            className="glass-panel p-6 rounded-2xl cursor-pointer"
           >
             <div className="flex items-center gap-3 mb-4">
               <div className={`w-3 h-3 rounded-full ${categoryColors[skill.category]}`}></div>
@@ -101,8 +140,7 @@ export default function SkillsSection() {
                 {categoryLabels[skill.category]}
               </span>
             </div>
-            
-            {/* Skill level bar */}
+
             <div className="mb-3">
               <div className="flex justify-between text-sm text-muted-foreground mb-1">
                 <span>Niveau</span>
@@ -113,24 +151,22 @@ export default function SkillsSection() {
                   className="bg-primary h-2 rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: `${skill.level}%` }}
-                  transition={{ delay: index * 0.1 + 0.3, duration: 0.8 }}
+                  transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                 ></motion.div>
               </div>
             </div>
-
-            {/* Description */}
+            
             <p className="text-sm text-muted-foreground leading-relaxed">
               {skill.description}
             </p>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
 
-      {/* Special highlight for creative skills */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.8 }}
         className="mt-12 glass-panel p-8 rounded-2xl bg-gradient-to-r from-primary/10 to-secondary/10"
       >
         <div className="text-center">
@@ -138,13 +174,13 @@ export default function SkillsSection() {
             🎨 L'Art au Service du Code
           </h4>
           <p className="text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-            Mon background artistique (10 ans de peinture) et entrepreneurial (6 ans dans le café) 
-            apporte une perspective unique à mes projets web. Cette expérience me permet de créer 
-            des interfaces non seulement fonctionnelles, mais aussi esthétiquement remarquables 
+            Mon background artistique (10 ans de peinture) et entrepreneurial (6 ans dans le café)
+            apporte une perspective unique à mes projets web. Cette expérience me permet de créer
+            des interfaces non seulement fonctionnelles, mais aussi esthétiquement remarquables
             et émotionnellement engageantes.
           </p>
         </div>
       </motion.div>
-    </section>
+    </motion.section>
   );
 }
