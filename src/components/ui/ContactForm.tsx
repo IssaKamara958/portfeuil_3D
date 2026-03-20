@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { supabase } from '../../lib/supabaseClient';
 
 interface FormData {
   full_name: string;
@@ -21,35 +20,19 @@ export default function ContactForm() {
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus('idle');
 
-    // 1. Send data to Supabase
-    const { error } = await supabase.from('contacts').insert([formData]);
+    const whatsappNumber = "221776828441";
+    const messageBody = `*Nouveau contact depuis votre portfolio :*\n\n*Prénom & Nom :* ${formData.full_name}\n*Email :* ${formData.email}\n*Téléphone :* ${formData.phone}\n*Profil Visiteur :* ${formData.visitor_type}\n*Sujet :* ${formData.subject}\n\n*Message :*\n${formData.message}`;
 
-    if (error) {
-      console.error('Error submitting to Supabase:', error);
-      setSubmitStatus('error');
-      setIsSubmitting(false);
-    } else {
-      setSubmitStatus('success');
-      setIsSubmitting(false);
-      
-      // 2. Prepare and open WhatsApp chat
-      const whatsappNumber = "221776828441";
-      const messageBody = `*Nouveau contact depuis votre portfolio :*\n\n*Prénom & Nom :* ${formData.full_name}\n*Email :* ${formData.email}\n*Téléphone :* ${formData.phone}\n*Profil Visiteur :* ${formData.visitor_type}\n*Sujet :* ${formData.subject}\n\n*Message :*\n${formData.message}`;
-      
-      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(messageBody)}`;
-      window.open(whatsappUrl, '_blank');
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(messageBody)}`;
+    window.open(whatsappUrl, '_blank');
 
-      // 3. Reset form
-      setFormData({ full_name: '', email: '', phone: '', visitor_type: '', subject: '', message: '' });
-      setTimeout(() => setSubmitStatus('idle'), 5000);
-    }
+    setFormData({ full_name: '', email: '', phone: '', visitor_type: '', subject: '', message: '' });
+    setIsSubmitting(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -137,28 +120,9 @@ export default function ContactForm() {
           whileTap={{ scale: 0.98 }}
           className="w-full py-3 px-6 rounded-lg font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isSubmitting ? 'Envoi en cours...' : 'Envoyer et Contacter sur WhatsApp'}
+          {isSubmitting ? 'Envoi en cours...' : 'Contacter sur WhatsApp'}
         </motion.button>
       </form>
-
-      {submitStatus === 'success' && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mt-4 p-3 bg-green-100 dark:bg-green-900/30 border border-green-300 dark:border-green-700 rounded-lg text-center text-sm"
-        >
-          ✅ Message enregistré ! Vous allez être redirigé vers WhatsApp.
-        </motion.div>
-      )}
-      {submitStatus === 'error' && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mt-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-700 rounded-lg text-center text-sm"
-        >
-          ❌ Une erreur est survenue. L\'enregistrement a échoué.
-        </motion.div>
-      )}
     </div>
   );
 }

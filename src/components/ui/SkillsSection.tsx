@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabaseClient';
+import { useState } from 'react';
 
 interface Skill {
   name: string;
@@ -8,6 +7,57 @@ interface Skill {
   category: 'frontend' | 'backend' | 'tools' | 'creative';
   description: string;
 }
+
+const staticSkills: Skill[] = [
+  {
+    name: "React & Next.js",
+    level: 90,
+    category: "frontend",
+    description: "Développement d'applications web modernes, performantes et SEO-friendly.",
+  },
+  {
+    name: "TypeScript",
+    level: 85,
+    category: "frontend",
+    description: "Typage statique pour des applications JavaScript robustes et maintenables.",
+  },
+  {
+    name: "Node.js & Express",
+    level: 75,
+    category: "backend",
+    description: "Création d'API RESTful et gestion de la logique serveur.",
+  },
+  {
+    name: "PostgreSQL & Supabase",
+    level: 70,
+    category: "backend",
+    description: "Modélisation de données, requêtes SQL et gestion de bases de données.",
+  },
+  {
+    name: "Figma & Design UI/UX",
+    level: 95,
+    category: "creative",
+    description: "De l'idée au prototype, conception d'interfaces intuitives et esthétiques.",
+  },
+  {
+    name: "Git & GitHub",
+    level: 85,
+    category: "tools",
+    description: "Contrôle de version et collaboration efficace sur les projets de code.",
+  },
+    {
+    name: "Three.js & R3F",
+    level: 80,
+    category: "frontend",
+    description: "Création d'expériences 3D interactives pour le web.",
+  },
+  {
+    name: "Gestion de Projet Agile",
+    level: 90,
+    category: "tools",
+    description: "Méthodologies Scrum et Kanban pour un développement itératif et flexible.",
+  },
+];
 
 const categoryColors = {
   frontend: 'bg-emerald-500',
@@ -59,20 +109,7 @@ const skillVariants = {
 
 export default function SkillsSection() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [skills, setSkills] = useState<Skill[]>([]);
-
-  useEffect(() => {
-    const fetchSkills = async () => {
-      const { data, error } = await supabase.from('skills').select('*');
-      if (error) {
-        console.error('Error fetching skills:', JSON.stringify(error, null, 2));
-      } else {
-        setSkills(data as Skill[]);
-      }
-    };
-
-    fetchSkills();
-  }, []);
+  const [skills, setSkills] = useState<Skill[]>(staticSkills);
 
   const filteredSkills = selectedCategory
     ? skills.filter(skill => skill.category === selectedCategory)

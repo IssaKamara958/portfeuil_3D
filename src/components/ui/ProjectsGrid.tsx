@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import ProjectCard from './ProjectCard';
-import { supabase } from '../../lib/supabaseClient';
 
 // Updated Project interface to better match the data structure and card needs
 interface Project {
@@ -38,39 +37,74 @@ const cardVariants = {
   },
 };
 
+const staticProjects: Project[] = [
+  {
+    id: 1,
+    title: "Senegal Energy Xool",
+    summary: "Découvrez ce projet, une application web moderne et performante.",
+    link: "https://senegal-energy-xool.lovable.app",
+    tag: "Web App",
+    image_url: "/placeholder.svg",
+    technologies: ["React", "TypeScript", "Next.js"],
+  },
+  {
+    id: 2,
+    title: "Empreinte Parfumée",
+    summary: "Découvrez ce projet, une application web moderne et performante.",
+    link: "https://empreinte-parfumee.lovable.app",
+    tag: "Web App",
+    image_url: "/placeholder.svg",
+    technologies: ["React", "TypeScript", "Next.js"],
+  },
+  {
+    id: 3,
+    title: "GLX Thiès Senegal",
+    summary: "Découvrez ce projet, une application web moderne et performante.",
+    link: "https://glx-thies-senegal.lovable.app",
+    tag: "Web App",
+    image_url: "/placeholder.svg",
+    technologies: ["React", "TypeScript", "Next.js"],
+  },
+  {
+    id: 4,
+    title: "Guide Enseignement",
+    summary: "Découvrez ce projet, une application web moderne et performante.",
+    link: "https://guide-enseignement.lovable.app",
+    tag: "Web App",
+    image_url: "/placeholder.svg",
+    technologies: ["React", "TypeScript", "Next.js"],
+  },
+  {
+    id: 5,
+    title: "Precis Tag",
+    summary: "Découvrez ce projet, une application web moderne et performante.",
+    link: "https://precis-tag.lovable.app",
+    tag: "Web App",
+    image_url: "/placeholder.svg",
+    technologies: ["React", "TypeScript", "Next.js"],
+  },
+  {
+    id: 6,
+    title: "Touhfatou Délices",
+    summary: "Découvrez ce projet, une application web moderne et performante.",
+    link: "https://touhfatou-delices-152604-c0083.web.app/",
+    tag: "Firebase App",
+    image_url: "/placeholder.svg",
+    technologies: ["React", "Firebase"],
+  },
+    {
+    id: 7,
+    title: "Le Magnifique",
+    summary: "Découvrez ce projet, une application web moderne et performante.",
+    link: "#", // Placeholder, waiting for user confirmation
+    tag: "Firebase App",
+    image_url: "/placeholder.svg",
+    technologies: ["React", "Firebase"],
+  },
+];
+
 export default function ProjectsGrid({ onOpen }: ProjectsGridProps) {
-  const [projects, setProjects] = useState<Project[]>([]);
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      // Fetch all projects
-      const { data, error } = await supabase.from('projects').select('*');
-
-      if (error) {
-        console.error('Error fetching projects:', JSON.stringify(error, null, 2));
-      } else if (data) {
-        // 1. Map Supabase data to the component's Project interface
-        const formattedProjects: Project[] = data.map((p: any) => ({
-          id: p.id,
-          title: p.title,
-          summary: p.description, // Map DB `description` to `summary`
-          link: p.project_url,    // Map DB `project_url` to `link`
-          tag: p.technologies?.[0] || 'Web App', // Use the first technology as a tag
-          image_url: p.image_url,
-          technologies: p.technologies,
-        }));
-
-        // 2. Filter for projects that are online (link is not a placeholder '#')
-        const onlineProjects = formattedProjects.filter(
-          p => p.link && p.link.trim() !== '#' && p.link.trim() !== ''
-        );
-
-        setProjects(onlineProjects);
-      }
-    };
-
-    fetchProjects();
-  }, []);
+  const [projects, setProjects] = useState<Project[]>(staticProjects);
 
   return (
     <motion.section
